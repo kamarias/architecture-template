@@ -1,5 +1,5 @@
 spring:
   application:
-    name: wyxTemplate
+    name: template-jpa
   profiles:
     active: dev
