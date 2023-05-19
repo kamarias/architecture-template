@@ -1,0 +1,82 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+#        server-addr: 10.10.9.97:8848
+        server-addr: 192.168.1.10:8848
+        namespace: 6ba72a77-9f6c-4c4d-af6c-15504f116bd2
+        username: nacos
+        password: nacos
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yml
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        username: ${spring.cloud.nacos.discovery.username}
+        password: ${spring.cloud.nacos.discovery.password}
+
+
+  #########  以下配置，最好配置到 nacos 配置文件中  #############
+
+  # redis 配置
+  redis:
+#    host: 10.10.9.102
+    host: 192.168.1.10
+    port: 6379
+#    password: gqBN21kmMy221
+    password: 970699
+    timeout: 15000
+    database: 1
+    client-type: lettuce
+    lettuce:
+      pool:
+        max-idle: 100
+        min-idle: 20
+        max-active: 100
+        max-wait: -1
+
+  #jpa 配置
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+# 数据库配置
+  datasource:
+    druid:
+      username: root
+      password: 970699
+      url: jdbc:mysql://192.168.1.10:3306/test_db?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initial-size: 5
+      min-idle: 10
+      max-active: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      max-evictable-idle-time-millis: 900000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: true
+      test-on-return: false
+      web-stat-filter:
+        enabled: true
+      stat-view-servlet:
+        enabled: true
+      # 慢sql配置
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            call-allow: true
+
+# 服务端口配置
+server:
+  port: 8002

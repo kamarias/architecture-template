@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.kamarias</groupId>
+        <artifactId>kamarias-spring-cloud-parent</artifactId>
+        <version>1.0.2.RELEASE</version>
+    </parent>
+
+    <groupId>io.github.kamarias</groupId>
+    <artifactId>template-jpa</artifactId>
+    <version>1.0.0</version>
+
+    <name>template-jpa</name>
+    <description>基于jpa的项目启动模板</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <querydsl.version>5.0.0</querydsl.version>
+        <kamarias.version>1.0.2.RELEASE</kamarias.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.kamarias</groupId>
+            <artifactId>kamarias-common</artifactId>
+            <version>${kamarias.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.kamarias</groupId>
+            <artifactId>kamarias-spring-common</artifactId>
+            <version>${kamarias.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!--  打包送到位置  -->
+    <distributionManagement>
+        <!--
+        <repository>
+            <id>dcb-packaging-releases</id>
+            <name>public</name>
+            <url>https://repo.gogpay.cn/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>dcb-packaging-releases</id>
+            <name>Snapshots</name>
+            <url>https://repo.gogpay.cn/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+        -->
+    </distributionManagement>
+
+    <!-- 依赖下载地址 -->
+    <repositories>
+        <repository>
+            <id>aliyun nexus</id>
+            <name>aliyun nexus</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <!--
+        <repository>
+            <id>dcb-packaging-releases</id>
+            <name>public</name>
+            <url>https://repo.gogpay.cn/nexus/content/repositories/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>dcb-packaging-snapshots</id>
+            <name>Snapshots</name>
+            <url>https://repo.gogpay.cn/nexus/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+              -->
+    </repositories>
+
+    <!-- 打包插件下载地址 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <!-- 执行deploy时打包源码 -->
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <!-- 处理打包时 mapstruct 自动生成 -->
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <!-- 处理打包时 yaml 文件提示问题 -->
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${spring.boot.dependencies.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- QueryDsl代码生成插件 -->
+            <plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <version>1.1.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 查询对象的生成路径 -->
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <!-- 生成查询对象的处理器， 使用JPA-->
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                            <sourceEncoding>utf-8</sourceEncoding>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

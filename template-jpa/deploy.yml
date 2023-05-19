@@ -1,0 +1,89 @@
+apiVersion: apps/v1         # 版本
+kind: Deployment            # 部署资源类型
+metadata:
+  labels:
+    app: gateway            # 部署Pod的标签
+  name: gateway             # pod名字
+  namespace: csc            # 部署到的名称空间
+spec:
+  progressDeadlineSeconds: 600    # 部署最长时间
+  replicas: 1               # 部署副本数
+  selector:
+    matchLabels:
+      app: gateway          # 选择要部署的pod标签
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%         # 最大部署数量
+      maxUnavailable: 50%   # 最大销毁数量
+    type: RollingUpdate     # 更新策略（滚动更新）
+  template:
+    metadata:
+      labels:
+        app: gateway        # 部署模板
+    spec:
+      imagePullSecrets:
+        - name: ali-docker-hub  # 镜像仓库令牌（公开不需要，私有需要到项目中配置保密字典）
+      containers:
+        - image: $REGISTRY/$DOCKERHUB_NAMESPACE/gateway:SNAPSHOT-$BUILD_NUMBER   # 部署镜像（这里使用devops动态区值）
+          livenessProbe:                    # 存活探针
+            httpGet:                        # 请求方式
+              path: /actuator/health        # 请求地址
+              port: 8080                    # 请求端口
+            initialDelaySeconds: 30         # 延迟时间
+            timeoutSeconds: 5               # 超时时间
+            failureThreshold: 30            # 失败阈值
+            successThreshold: 1             # 失败阈值
+            periodSeconds: 10               # 请求周期
+          readinessProbe:                   # 就绪探针
+            httpGet:                        # 请求方式
+              path: /actuator/health        # 请求地址
+              port: 8080                    # 请求端口
+            timeoutSeconds: 10              # 超时时间
+            failureThreshold: 30            # 失败阈值
+            periodSeconds: 5                # 请求周期
+          imagePullPolicy: Always           # 镜像拉取策略
+          name: app                         # 部署名称
+          ports:
+            - containerPort: 8080           # 暴露端口
+              protocol: TCP                 # 请求协议
+          resources:
+            limits:
+              cpu: 300m                     # 最大cpu限制
+              memory: 600Mi                 # 最大内存限制
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:                     # 容器内挂载时区（同步主机时间）
+            - name: host-time               # 同步名称
+              readOnly: true                # 只读挂载
+              mountPath: /etc/localtime     # 挂载目录
+      volumes:                              # 主机外时区
+        - name: host-time                   # 同步名称
+          hostPath:
+            path: /etc/localtime            # 挂载目录
+            type: ''                        # 时间类型（默认）
+      dnsPolicy: ClusterFirst               # DNS策略
+      restartPolicy: Always                 # 重启策略
+      terminationGracePeriodSeconds: 30     # 最大销毁周期
+
+# 以下是给应用部署服务
+---
+apiVersion: v1              #
+kind: Service               # 部署资源
+metadata:
+  labels:
+    app: gateway            # 选择部署pod标签
+  name: gateway             # 部署资源名
+  namespace: csc            # 部署名称空间
+spec:
+  ports:
+    - name: http            # 请求协议
+      port: 8080            # pod外部端口
+      protocol: TCP         # 通讯协议
+      targetPort: 8080      # pod内部端口
+      nodePort: 32715       # 外部服务端口
+  selector:
+    app: gateway            # 选择pod
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+  type: NodePort           # 服务类型
+
