@@ -79,4 +79,4 @@ spring:
 
 # 服务端口配置
 server:
-  port: 8002
+  port: 8001
