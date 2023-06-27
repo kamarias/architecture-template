@@ -1,0 +1,72 @@
+apiVersion: apps/v1         # 版本
+kind: Deployment            # 部署资源类型
+metadata:
+  labels:
+    app: csc-vue            # 部署Pod的标签
+  name: csc-vue             # pod名字
+  namespace: csc            # 部署到的名称空间
+spec:
+  progressDeadlineSeconds: 600    # 部署最长时间
+  replicas: 1               # 部署副本数
+  selector:
+    matchLabels:
+      app: csc-vue          # 选择要部署的pod标签
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%         # 最大部署数量
+      maxUnavailable: 50%   # 最大销毁数量
+    type: RollingUpdate     # 更新策略（滚动更新）
+  template:
+    metadata:
+      labels:
+        app: csc-vue        # 部署模板
+    spec:
+      imagePullSecrets:
+        - name: ali-docker-hub  # 镜像仓库令牌（公开不需要，私有需要到项目中配置保密字典）
+      containers:
+        - image: $REGISTRY/$DOCKERHUB_NAMESPACE/csc-vue:SNAPSHOT-$BUILD_NUMBER   # 部署镜像（这里使用devops动态区值）
+          imagePullPolicy: Always           # 镜像拉取策略
+          name: app                         # 部署名称
+          ports:
+            - containerPort: 80           # 暴露端口
+              protocol: TCP                 # 请求协议
+          resources:
+            limits:
+              cpu: 300m                     # 最大cpu限制
+              memory: 600Mi                 # 最大内存限制
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:                     # 容器内挂载时区（同步主机时间）
+            - name: host-time               # 同步名称
+              readOnly: true                # 只读挂载
+              mountPath: /etc/localtime     # 挂载目录
+      volumes:                              # 主机外时区
+        - name: host-time                   # 同步名称
+          hostPath:
+            path: /etc/localtime            # 挂载目录
+            type: ''                        # 时间类型（默认）
+      dnsPolicy: ClusterFirst               # DNS策略
+      restartPolicy: Always                 # 重启策略
+      terminationGracePeriodSeconds: 30     # 最大销毁周期
+# 以下是给应用部署服务
+---
+apiVersion: v1              #
+kind: Service               # 部署资源
+metadata:
+  labels:
+    app: csc-vue            # 选择部署pod标签
+  name: csc-vue             # 部署资源名
+  namespace: csc            # 部署名称空间
+spec:
+  ports:
+    - name: http            # 请求协议
+      port: 80            # pod外部端口
+      protocol: TCP         # 通讯协议
+      targetPort: 80      # pod内部端口
+      nodePort: 32710       # 外部服务端口
+  selector:
+    app: csc-vue            # 选择pod
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+  type: NodePort           # 服务类型
+
