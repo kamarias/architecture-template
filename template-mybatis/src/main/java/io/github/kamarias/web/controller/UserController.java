@@ -1,6 +1,6 @@
 package io.github.kamarias.web.controller;
 
-import io.github.kamarias.annotation.WebLog;
+import io.github.kamarias.web.annotation.WebLog;
 import io.github.kamarias.dto.AjaxResult;
 import io.github.kamarias.entity.UserEntity;
 import io.github.kamarias.query.QueryUserForm;

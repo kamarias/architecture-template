@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.1.10:8848
+        server-addr: 192.168.43.10:8848
         namespace: 6ba72a77-9f6c-4c4d-af6c-15504f116bd2
         username: nacos
         password: nacos
@@ -24,7 +24,7 @@ spring:
   # redis 配置
   redis:
     #    host: 10.10.9.102
-    host: 192.168.1.10
+    host: 192.168.43.10
     port: 6379
     #    password: gqBN21kmMy221
     password: 970699

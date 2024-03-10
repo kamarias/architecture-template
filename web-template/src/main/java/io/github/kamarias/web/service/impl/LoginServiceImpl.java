@@ -79,7 +79,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public <T extends LoginObject> String generateToken(T t) {
-        return tokenUtils.createToken(t);
+         return tokenUtils.createToken(t);
     }
 
     @Override

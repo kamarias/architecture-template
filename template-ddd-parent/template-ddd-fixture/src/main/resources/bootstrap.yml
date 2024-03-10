@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: template-fixture-app
+  cloud:
+    nacos:
+      discovery:
+        #        server-addr: 10.10.9.97:8848
+        server-addr: 192.168.43.10:8848
+        namespace: 6ba72a77-9f6c-4c4d-af6c-15504f116bd2
+        username: nacos
+        password: nacos
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yml
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        username: ${spring.cloud.nacos.discovery.username}
+        password: ${spring.cloud.nacos.discovery.password}
+
+dubbo:
+  registry:
+    address: nacos://nacos:nacos@192.168.43.10:8848?namespace=6ba72a77-9f6c-4c4d-af6c-15504f116bd2&register-consumer-url=true
+    group: DEFAULT_GROUP
+    protocol: dubbo
+    parameters.namespace: 6ba72a77-9f6c-4c4d-af6c-15504f116bd2
+    parameters.register-consumer-url: true
+    port: 20881
+  application:
+    name: ${spring.application.name}
+    qos-port: 22221

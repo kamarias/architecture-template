@@ -2,7 +2,7 @@ package io.github.kamarias.web.controller.system;
 
 
 import io.github.kamarias.annotation.RequiresPermissions;
-import io.github.kamarias.annotation.WebLog;
+import io.github.kamarias.web.annotation.WebLog;
 import io.github.kamarias.dto.AjaxResult;
 import io.github.kamarias.entity.UserEntity;
 import io.github.kamarias.form.ResetPassWordForm;

@@ -23,7 +23,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <mybatis.plus.version>3.5.3.1</mybatis.plus.version>
-        <kamarias.version>1.0.2.RELEASE</kamarias.version>
+        <kamarias.version>1.0.3.RELEASE</kamarias.version>
     </properties>
 
     <dependencies>

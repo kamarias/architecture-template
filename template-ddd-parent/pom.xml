@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.6.15</version>
+    </parent>
+
+    <groupId>io.github.kamarias</groupId>
+    <artifactId>template-ddd-parent</artifactId>
+    <version>1.0.0.RELEASE</version>
+    <packaging>pom</packaging>
+    <name>template-ddd-parent</name>
+    <description>DDD项目模板依赖管理</description>
+
+    <modules>
+        <module>template-ddd-application</module>
+        <module>template-ddd-domain</module>
+        <module>template-ddd-infrastructure</module>
+        <module>template-ddd-model</module>
+        <module>template-ddd-http-starter</module>
+        <module>template-ddd-http-api</module>
+        <module>template-ddd-rpc-api</module>
+        <module>template-ddd-rpc-starter</module>
+        <module>template-ddd-rpc-api-sub</module>
+        <module>template-ddd-fixture</module>
+        <module>template-ddd-common</module>
+    </modules>
+
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <spring.boot.dependencies.version>2.6.15</spring.boot.dependencies.version>
+        <spring.cloud.dependencies.version>2021.0.5</spring.cloud.dependencies.version>
+        <spring.cloud.alibaba.dependencies.version>2021.0.4.0</spring.cloud.alibaba.dependencies.version>
+        <dubbo.dependencies.version>3.2.10</dubbo.dependencies.version>
+        <druid.starter.version>1.2.15</druid.starter.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <fastjson2.version>2.0.33</fastjson2.version>
+        <kamarias.version>1.0.3.RELEASE</kamarias.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--SpringBoot 依赖-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--Spring Cloud 依赖-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--Spring Cloud Alibaba 依赖-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--Spring Cloud Alibaba 依赖-->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-bom</artifactId>
+                <version>${dubbo.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.kamarias</groupId>
+                <artifactId>kamarias-spring-boot-message-starter</artifactId>
+                <version>${kamarias.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.kamarias</groupId>
+                <artifactId>kamarias-spring-security-auth-starter</artifactId>
+                <version>${kamarias.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.kamarias</groupId>
+                <artifactId>kamarias-spring-boot-distributed-lock-starter</artifactId>
+                <version>${kamarias.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.kamarias</groupId>
+                <artifactId>kamarias-common</artifactId>
+                <version>${kamarias.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.kamarias</groupId>
+                <artifactId>kamarias-spring-common</artifactId>
+                <version>${kamarias.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+    <!--打包是附带源码打包-->
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <fork>true</fork>
+                    <verbose>true</verbose>
+                    <encoding>UTF-8</encoding>
+                    <annotationProcessorPaths>
+                        <!-- 处理打包时 mapstruct 自动生成 -->
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <!-- 处理打包时 yaml 文件提示问题 -->
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${spring.boot.dependencies.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
