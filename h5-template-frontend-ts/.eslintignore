@@ -1,0 +1,11 @@
+public
+dist
+*.d.ts
+/src/assets
+package.json
+.eslintrc.js
+.prettierrc.js
+commitlint.config.js
+postcss.config.cjs
+tailwind.config.cjs
+stylelint.config.js
